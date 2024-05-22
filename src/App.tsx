@@ -1,10 +1,20 @@
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './pages/Login';
 
-const App = () => {
+import ProtectedRoute from './components/ProtectedRoute';
+
+const App: React.FC = () => {
+  const isAuthenticated = false;
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={"hello world!"} />
+        <Route path="/login" element={<Login />} />
+        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+          <Route path="/" element={<Home />} />
+        </Route>
       </Routes>
     </Router>
   );
