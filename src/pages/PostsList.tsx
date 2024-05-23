@@ -25,7 +25,7 @@ interface GetPostsData {
     posts: {
         totalCount: number;
         pageInfo: {
-            endCursor: string;
+            endCursor: string | null;
             hasNextPage: boolean;
         };
         nodes: Post[];
@@ -45,6 +45,23 @@ interface GetPostsVars {
     reverse?: boolean;
     spaceIds: string[];
     query?: string;
+}
+
+
+const fetchDate = (dateString: string) => {
+    const date = new Date(dateString);
+
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+
+    return formattedDate
+
 }
 
 const PostList: React.FC = () => {
@@ -112,7 +129,6 @@ const PostList: React.FC = () => {
 
                     return {
                         posts: {
-                            __typename: previousResult.posts.__typename,
                             totalCount: fetchMoreResult.posts.totalCount,
                             pageInfo: fetchMoreResult.posts.pageInfo,
                             nodes: updatedPosts
@@ -155,7 +171,7 @@ const PostList: React.FC = () => {
     if (error) return <p>Error: {error.message}</p>;
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8" data-testid="posts-list">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
                 {posts.map(post => (
                     <div key={post.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex flex-col">
@@ -171,12 +187,13 @@ const PostList: React.FC = () => {
                             <p className="text-gray-700 dark:text-gray-300 mb-4">{post.description}</p>
                         </Link>
                         <p className="text-gray-500 dark:text-gray-400">By: {post.owner.member.name}</p>
-                        <p className="text-gray-500 dark:text-gray-400">Created at: {post.createdAt}</p>
+                        <p className="text-gray-500 dark:text-gray-400 pb-4">Created at: {fetchDate(post.createdAt)}</p>
                         <button
+                            data-testid="thumbs-up"
                             onClick={() => handleLike(post.id)}
                             className="mt-auto px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition"
                         >
-                            <FontAwesomeIcon icon={faThumbsUp} /> {post.likes}
+                            <FontAwesomeIcon icon={faThumbsUp} /> <span data-testid={`likes-${post.title}`}>{post.likes}</span>
                         </button>
                     </div>
                 ))}
@@ -184,6 +201,7 @@ const PostList: React.FC = () => {
             {hasNextPage && (
                 <div className="flex justify-center mt-6">
                     <button
+                        data-testid="load-more"
                         onClick={loadMorePosts}
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
                     >

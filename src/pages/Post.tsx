@@ -20,7 +20,7 @@ const Post: React.FC = () => {
     const post = data?.post;
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8" data-testid="post-page">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 {post?.thumbnail?.url ? (
                     <img src={post.thumbnail.url} alt={post.title} className="w-full h-64 object-cover mb-4 rounded" />
