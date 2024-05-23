@@ -64,16 +64,9 @@ export interface PostData {
                 emailStatus: string;
                 newEmail: string;
                 tagline: string;
-                lastSeenAt: string;
                 createdAt: string;
                 updatedAt: string;
-                relativeUrl: string;
                 url: string;
-                externalId: string;
-                roleId: string;
-                flagged: boolean;
-                teammate: boolean;
-                staffReasons: string;
                 profilePicture: {
                     __typename: string;
                     id: string;

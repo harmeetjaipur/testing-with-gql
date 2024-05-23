@@ -77,22 +77,6 @@ export const GET_POSTS = gql`
               thumb
             }
           }
-          ... on Emoji {
-            __typename
-            id
-            text
-          }
-          ... on Glyph {
-            __typename
-            id
-            text
-            variant
-          }
-          ... on File {
-            id
-            name
-            url
-          }
         }
         relativeUrl
         url
@@ -110,16 +94,9 @@ export const GET_POSTS = gql`
             emailStatus
             newEmail
             tagline
-            lastSeenAt
             createdAt
             updatedAt
-            relativeUrl
             url
-            externalId
-            roleId
-            flagged
-            teammate
-            staffReasons
             profilePicture {
               ... on Image {
                 __typename
@@ -142,22 +119,6 @@ export const GET_POSTS = gql`
                   small
                   thumb
                 }
-              }
-              ... on Emoji {
-                __typename
-                id
-                text
-              }
-              ... on Glyph {
-                __typename
-                id
-                text
-                variant
-              }
-              ... on File {
-                id
-                name
-                url
               }
             }
           }
