@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useQuery, ApolloCache } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import { GET_POST } from '../graphql/GET_POST';
 import { PostData } from './types';
@@ -12,14 +12,21 @@ import { fetchDate } from '../utils';
 const Post: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { loading, error, data } = useQuery<{ post: PostData }>(GET_POST, {
+    const { loading, error, data, client } = useQuery<{ post: PostData }>(GET_POST, {
         variables: { id },
     });
+
+    const [likes, setLikes] = useState(data?.post.likes || 0);
 
     if (loading) return <Loading />;
     if (error) return <p>Error: {error.message}</p>;
 
     const post = data?.post;
+
+    const handleLike = () => {
+        // using local state for likes as bearer token returns 403 for the mutation
+        setLikes(likes + 1);
+    };
 
     return (
         post && (
@@ -42,6 +49,13 @@ const Post: React.FC = () => {
                     <div className="text-gray-700 dark:text-gray-300 mb-4">{post.description}</div>
                     <p className="text-gray-500 dark:text-gray-400">By: {post.owner.member.name}</p>
                     <p className="text-gray-500 dark:text-gray-400">Created at: {fetchDate(post.createdAt)}</p>
+                    <button
+                        data-testid="thumbs-up"
+                        onClick={handleLike}
+                        className="mt-auto w-20 px-4 mt-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition"
+                    >
+                        <FontAwesomeIcon icon={faThumbsUp} /> <span data-testid={`likes-${post.title}`}>{likes}</span>
+                    </button>
                 </div>
             </div>
         )
