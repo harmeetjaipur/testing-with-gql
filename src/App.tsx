@@ -1,44 +1,49 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/Header';
+import PostList from './pages/PostsList';
+import Post from './pages/Post';
 
 const App: React.FC = () => {
-  const isAuthenticated = Boolean(localStorage.getItem("token")?.length);
+  const [isAuthenticated, setIsAuthenticated] = useState(Boolean(localStorage.getItem("token")?.length));
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token && location.pathname === '/login') {
+      navigate('/');
+    }
+    setIsAuthenticated(Boolean(token?.length));
+  }, [location, navigate]);
+
   document.documentElement.classList.add('dark');
 
-  // const [darkMode, setDarkMode] = useState(false);
-
-  // const toggleDarkMode = () => {
-  //   setDarkMode(!darkMode);
-  //   if (darkMode) {
-  //     document.documentElement.classList.remove('dark');
-  //   } else {
-  //     document.documentElement.classList.add('dark');
-  //   }
-  // };
-
   return (
-    <Router>
-      {/* convert this into a toggle UI instead of text based button
-      <div className="fixed top-0 w-full p-4 bg-white dark:bg-gray-800 z-50">
-        <button
-          onClick={toggleDarkMode}
-          className="p-2 bg-primary text-white rounded"
-        >
-          Dark Mode
-        </button>
-      </div> */}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-          <Route path="/" element={<Home />} />
-        </Route>
-      </Routes>
-    </Router>
+    <>
+      <Header />
+      <div className="pt-16">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/posts" element={<PostList />} />
+            <Route path="/posts/:id" element={<Post />} />
+          </Route>
+        </Routes>
+      </div>
+    </>
   );
 };
 
-export default App;
+const AppWithRouter: React.FC = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default AppWithRouter;
