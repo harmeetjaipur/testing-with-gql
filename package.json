@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "@apollo/client": "^3.10.4",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "autoprefixer": "^10.4.19",
     "graphql": "^16.8.1",
+    "html-react-parser": "^5.1.10",
     "postcss": "^8.4.38",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
