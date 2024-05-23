@@ -18,7 +18,7 @@ export const GET_POST = gql`
       }
       owner {
         member {
-          displayName
+          name
         }
       }
     }

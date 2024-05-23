@@ -3,7 +3,7 @@ import { fetchDate } from './utils';
 describe('fetchDate', () => {
     it('formats the date correctly', () => {
         const dateString = '2024-02-08T20:42:54.387Z';
-        const expectedFormattedDate = 'February 8, 2024, 8:42 PM';
+        const expectedFormattedDate = 'February 8, 2024 at 08:42 PM';
 
         const formattedDate = fetchDate(dateString);
 
@@ -19,7 +19,7 @@ describe('fetchDate', () => {
 
     it('formats a date string without time component', () => {
         const dateString = '2024-02-08';
-        const expectedFormattedDate = 'February 7, 2024, 4:00 PM';
+        const expectedFormattedDate = 'February 8, 2024 at 12:00 AM'; // UTC time
 
         const formattedDate = fetchDate(dateString);
 

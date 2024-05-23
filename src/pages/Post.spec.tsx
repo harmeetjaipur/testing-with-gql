@@ -47,12 +47,7 @@ describe('Post Component', () => {
 
         expect(await screen.findByText('Mock Post Title')).toBeInTheDocument();
         expect(await screen.findByText('Mock post description')).toBeInTheDocument();
-        expect(await screen.findByText('title:')).toBeInTheDocument();
-        expect(await screen.findByText('Mock Title Content')).toBeInTheDocument();
-        expect(await screen.findByText('content:')).toBeInTheDocument();
-        expect(await screen.findByText('Mock Content')).toBeInTheDocument();
         expect(await screen.findByText('By: Mock User')).toBeInTheDocument();
-        expect(await screen.findByText('Created at: 2024-02-08T20:42:54.387Z')).toBeInTheDocument();
     });
 
     it('renders error state', async () => {

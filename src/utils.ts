@@ -1,15 +1,12 @@
+import { format, toZonedTime } from 'date-fns-tz';
+
 export const fetchDate = (dateString: string) => {
     const date = new Date(dateString);
 
-    const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    };
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+    if (isNaN(date.getTime())) {
+        return 'Invalid Date';
+    }
 
-    return formattedDate
-
-}
+    const zonedDate = toZonedTime(date, 'UTC');
+    return format(zonedDate, "MMMM d, yyyy 'at' hh:mm a");
+};

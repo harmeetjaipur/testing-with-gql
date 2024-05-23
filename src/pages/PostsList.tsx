@@ -6,11 +6,8 @@ import { Link } from 'react-router-dom';
 
 import { GET_POSTS } from '../graphql/GET_POSTS';
 import Loading from '../components/Loading';
-import { GetPostsData, GetPostsVars, Post } from './types';
+import { GetPostsData, GetPostsVars, PostData } from './types';
 import { fetchDate } from '../utils';
-
-
-
 
 const PostList: React.FC = () => {
     const { loading, error, data, fetchMore, client } = useQuery<GetPostsData, GetPostsVars>(GET_POSTS, {
@@ -45,8 +42,8 @@ const PostList: React.FC = () => {
         }
     });
 
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [endCursor, setEndCursor] = useState<string | null>(null);
+    const [posts, setPosts] = useState<PostData[]>([]);
+    const [endCursor, setEndCursor] = useState<string>('');
     const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
     useEffect(() => {
@@ -99,7 +96,7 @@ const PostList: React.FC = () => {
         updateCache(client.cache, updatedPosts);
     };
 
-    const updateCache = (cache: ApolloCache<any>, updatedPosts: Post[]) => {
+    const updateCache = (cache: ApolloCache<any>, updatedPosts: PostData[]) => {
         cache.writeQuery<GetPostsData>({
             query: GET_POSTS,
             data: {
