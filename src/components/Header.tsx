@@ -13,7 +13,7 @@ const Header: React.FC = () => {
         <header className="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-50" data-testid="header">
             <div className="container mx-auto flex justify-between items-center p-4">
                 <div className="text-2xl font-bold text-blue-500 dark:text-white">
-                    MyApp
+                    <Link to="/">MyApp</Link>
                 </div>
                 <nav className="space-x-4">
                     <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">

@@ -3,31 +3,21 @@ import { gql } from '@apollo/client';
 export const GET_POSTS = gql`
   query GetPosts(
     $after: String
-    $before: String
-    $excludePins: Boolean
     $filterBy: [PostListFilterByInput!]
     $limit: Int!
-    $offset: Int
-    $orderBy: PostListOrderByEnum
     $orderByString: String
     $postTypeIds: [String!]
     $reverse: Boolean
     $spaceIds: [ID!]
-    $query: String
   ) {
     posts(
       after: $after
-      before: $before
-      excludePins: $excludePins
       filterBy: $filterBy
       limit: $limit
-      offset: $offset
-      orderBy: $orderBy
       orderByString: $orderByString
       postTypeIds: $postTypeIds
       reverse: $reverse
       spaceIds: $spaceIds
-      query: $query
     ) {
       totalCount
       pageInfo {
@@ -37,10 +27,6 @@ export const GET_POSTS = gql`
       nodes {
         id
         slug
-        fields {
-          key
-          value
-        }
         reactionsCount
         hasMoreContent
         shortContent

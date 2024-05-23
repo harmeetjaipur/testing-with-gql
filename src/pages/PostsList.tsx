@@ -3,66 +3,14 @@ import { useQuery, ApolloCache } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+
 import { GET_POSTS } from '../graphql/GET_POSTS';
-
-interface Post {
-    id: string;
-    title: string;
-    description: string;
-    createdAt: string;
-    likes: number;
-    thumbnail: {
-        url: string;
-    };
-    owner: {
-        member: {
-            name: string;
-        };
-    };
-}
-
-interface GetPostsData {
-    posts: {
-        totalCount: number;
-        pageInfo: {
-            endCursor: string | null;
-            hasNextPage: boolean;
-        };
-        nodes: Post[];
-    };
-}
-
-interface GetPostsVars {
-    after?: string;
-    before?: string;
-    excludePins?: boolean;
-    filterBy?: any[];
-    limit: number;
-    offset?: number;
-    orderBy?: string;
-    orderByString?: string;
-    postTypeIds: string[];
-    reverse?: boolean;
-    spaceIds: string[];
-    query?: string;
-}
+import Loading from '../components/Loading';
+import { GetPostsData, GetPostsVars, Post } from './types';
+import { fetchDate } from '../utils';
 
 
-const fetchDate = (dateString: string) => {
-    const date = new Date(dateString);
 
-    const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    };
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
-
-    return formattedDate
-
-}
 
 const PostList: React.FC = () => {
     const { loading, error, data, fetchMore, client } = useQuery<GetPostsData, GetPostsVars>(GET_POSTS, {
@@ -167,12 +115,12 @@ const PostList: React.FC = () => {
         });
     };
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <Loading />;
     if (error) return <p>Error: {error.message}</p>;
 
     return (
         <div className="container mx-auto px-4 py-8" data-testid="posts-list">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {posts.map(post => (
                     <div key={post.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex flex-col">
                         <Link to={`/posts/${post.id}`} className="flex-grow">
@@ -191,7 +139,7 @@ const PostList: React.FC = () => {
                         <button
                             data-testid="thumbs-up"
                             onClick={() => handleLike(post.id)}
-                            className="mt-auto px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition"
+                            className="mt-auto w-20 px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition"
                         >
                             <FontAwesomeIcon icon={faThumbsUp} /> <span data-testid={`likes-${post.title}`}>{post.likes}</span>
                         </button>

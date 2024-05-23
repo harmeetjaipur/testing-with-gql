@@ -189,3 +189,46 @@ export interface PostData {
         };
     };
 }
+
+
+export interface Post {
+    id: string;
+    title: string;
+    description: string;
+    createdAt: string;
+    likes: number;
+    thumbnail: {
+        url: string;
+    };
+    owner: {
+        member: {
+            name: string;
+        };
+    };
+}
+
+export interface GetPostsData {
+    posts: {
+        totalCount: number;
+        pageInfo: {
+            endCursor: string | null;
+            hasNextPage: boolean;
+        };
+        nodes: Post[];
+    };
+}
+
+export interface GetPostsVars {
+    after?: string;
+    before?: string;
+    excludePins?: boolean;
+    filterBy?: any[];
+    limit: number;
+    offset?: number;
+    orderBy?: string;
+    orderByString?: string;
+    postTypeIds: string[];
+    reverse?: boolean;
+    spaceIds: string[];
+    query?: string;
+}
