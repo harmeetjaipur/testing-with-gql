@@ -30,4 +30,14 @@ A responsive web application built with Vite, React (using functional components
    ```bash
    git clone git@github.com:harmeetjaipur/bettermode.git
    cd bettermode
+   npm i
+   npm run dev
+   ```
+
+   Use `node 18.x.x` for best results
+
+2. Run tests with:
+
+   ```
+   npm test
    ```
