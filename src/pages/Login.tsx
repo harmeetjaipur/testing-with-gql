@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const token = `token goes here`;
+        const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkdVRVNUX2M4eWN1ZDBjQ1V3eVRkUyIsIm5ldHdvcmtJZCI6InlGTWhHaDZYcnMiLCJuZXR3b3JrRG9tYWluIjoicG9kZGVycy1vbGQuYmV0dGVybW9kZS5pbyIsInRva2VuVHlwZSI6IkdVRVNUIiwiZW50aXR5SWQiOm51bGwsInBlcm1pc3Npb25Db250ZXh0IjpudWxsLCJwZXJtaXNzaW9ucyI6bnVsbCwiaWF0IjoxNzE2NDE1NTcwLCJleHAiOjE3MTkwMDc1NzB9.CmO7oF8iTGIePj2KGqEGFZBl8NzQ6RAAFkExAuBYVEk`
         localStorage.setItem("token", token);
-        navigate('/');
-    };
-
-    useEffect(() => {
-        localStorage.removeItem("token");
-    }, []);
+        navigate('/'); // Navigate to the home page after setting the token
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
