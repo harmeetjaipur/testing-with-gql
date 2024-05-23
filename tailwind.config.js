@@ -5,7 +5,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Extend the default color palette with custom purple shades
         primary: {
           light: "#D6BBFB",
           DEFAULT: "#7B61FF",
