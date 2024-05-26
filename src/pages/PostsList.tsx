@@ -9,93 +9,98 @@ import Loading from '../components/Loading';
 import { GetPostsData, GetPostsVars, PostData } from './types';
 import { fetchDate } from '../utils';
 
+// PostList component to display a list of posts
 const PostList: React.FC = () => {
     const { loading, error, data, fetchMore, client } = useQuery<GetPostsData, GetPostsVars>(GET_POSTS, {
         variables: {
-            limit: 3,
-            spaceIds: ['jQ6U37yiM2JP'],
-            postTypeIds: ['W99dsSCEVggYqIV'],
-            orderByString: 'reactionsCount',
-            reverse: true,
+            limit: 3, // Number of posts to fetch initially
+            spaceIds: ['jQ6U37yiM2JP'], // Space ID filter
+            postTypeIds: ['W99dsSCEVggYqIV'], // Post type ID filter
+            orderByString: 'reactionsCount', // Order by reactions count
+            reverse: true, // Reverse order
             filterBy: [
                 {
-                    keyString: 'fields.status',
-                    operator: 'nin',
-                    value: '["clDbTfjFXRZfGrBBCWOJ3","nBOSIoGagWRh7dBY4wgEL"]'
+                    keyString: 'fields.status', // Filter key
+                    operator: 'nin', // Not in operator
+                    value: '["clDbTfjFXRZfGrBBCWOJ3","nBOSIoGagWRh7dBY4wgEL"]' // Filter values
                 }
             ]
         },
         context: {
             headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}` // Authorization header
             }
         },
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: 'cache-and-network', // Fetch policy
         onCompleted: (data) => {
             const initializedPosts = data.posts.nodes.map(post => ({
                 ...post,
-                likes: post.likes || 0
+                likes: post.likes || 0 // Initialize likes if not present
             }));
-            setPosts(initializedPosts);
-            setEndCursor(data.posts.pageInfo.endCursor);
-            setHasNextPage(data.posts.pageInfo.hasNextPage);
+            setPosts(initializedPosts); // Set posts state
+            setEndCursor(data.posts.pageInfo.endCursor); // Set end cursor for pagination
+            setHasNextPage(data.posts.pageInfo.hasNextPage); // Set hasNextPage for pagination
         }
     });
 
-    const [posts, setPosts] = useState<PostData[]>([]);
-    const [endCursor, setEndCursor] = useState<string>('');
-    const [hasNextPage, setHasNextPage] = useState<boolean>(false);
+    const [posts, setPosts] = useState<PostData[]>([]); // State to store posts
+    const [endCursor, setEndCursor] = useState<string>(''); // State to store end cursor for pagination
+    const [hasNextPage, setHasNextPage] = useState<boolean>(false); // State to store if more pages are available
 
+    // Effect to handle data fetching and state initialization
     useEffect(() => {
         if (data) {
             const cachedPosts = data.posts.nodes.map(post => ({
                 ...post,
-                likes: post.likes || 0
+                likes: post.likes || 0 // Initialize likes if not present
             }));
-            setPosts(cachedPosts);
-            setEndCursor(data.posts.pageInfo.endCursor);
-            setHasNextPage(data.posts.pageInfo.hasNextPage);
+            setPosts(cachedPosts); // Set posts state
+            setEndCursor(data.posts.pageInfo.endCursor); // Set end cursor for pagination
+            setHasNextPage(data.posts.pageInfo.hasNextPage); // Set hasNextPage for pagination
         }
     }, [data]);
 
+    // Function to load more posts for pagination
     const loadMorePosts = () => {
         if (fetchMore) {
             fetchMore({
                 variables: {
-                    after: endCursor
+                    after: endCursor // Fetch posts after the current end cursor
                 },
                 updateQuery: (previousResult, { fetchMoreResult }) => {
                     if (!fetchMoreResult) return previousResult;
 
                     const updatedPosts = [...previousResult.posts.nodes, ...fetchMoreResult.posts.nodes.map(post => ({
                         ...post,
-                        likes: post.likes || 0
+                        likes: post.likes || 0 // Initialize likes if not present
                     }))];
 
                     return {
                         posts: {
                             totalCount: fetchMoreResult.posts.totalCount,
                             pageInfo: fetchMoreResult.posts.pageInfo,
-                            nodes: updatedPosts
+                            nodes: updatedPosts // Update the posts list with new posts
                         }
                     };
                 }
             }).then(result => {
                 const { endCursor, hasNextPage } = result.data.posts.pageInfo;
-                setEndCursor(endCursor);
-                setHasNextPage(hasNextPage);
+                setEndCursor(endCursor); // Update end cursor for next pagination
+                setHasNextPage(hasNextPage); // Update hasNextPage for next pagination
             });
         }
     };
 
+    // Function to handle like action on a post
     const handleLike = (postId: string) => {
         const updatedPosts = posts.map(post =>
             post.id === postId ? { ...post, likes: post.likes + 1 } : post
         );
-        setPosts(updatedPosts);
-        updateCache(client.cache, updatedPosts);
+        setPosts(updatedPosts); // Update posts state with new likes count
+        updateCache(client.cache, updatedPosts); // Update the Apollo cache with new likes count
     };
 
+    // Function to update Apollo cache
     const updateCache = (cache: ApolloCache<any>, updatedPosts: PostData[]) => {
         cache.writeQuery<GetPostsData>({
             query: GET_POSTS,
@@ -106,14 +111,14 @@ const PostList: React.FC = () => {
                         endCursor,
                         hasNextPage
                     },
-                    nodes: updatedPosts
+                    nodes: updatedPosts // Update the cache with new posts data
                 }
             }
         });
     };
 
-    if (loading) return <Loading />;
-    if (error) return <p>Error: {error.message}</p>;
+    if (loading) return <Loading />; // Show loading component while fetching data
+    if (error) return <p>Error: {error.message}</p>; // Show error message if query fails
 
     return (
         <div className="container mx-auto px-4 py-8" data-testid="posts-list">
@@ -138,7 +143,7 @@ const PostList: React.FC = () => {
                             onClick={() => handleLike(post.id)}
                             className="mt-auto w-20 px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition"
                         >
-                            <FontAwesomeIcon icon={faThumbsUp} /> <span data-testid={`likes-${post.title}`}>{post.likes}</span>
+                            <FontAwesomeIcon icon={faThumbsUp} /> <span data-testid={`likes-${post.title}`}>{post.likes}</span> {/* Button to like the post */}
                         </button>
                     </div>
                 ))}
@@ -150,7 +155,7 @@ const PostList: React.FC = () => {
                         onClick={loadMorePosts}
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
                     >
-                        Show More
+                        Show More {/* Button to load more posts */}
                     </button>
                 </div>
             )}
@@ -158,4 +163,4 @@ const PostList: React.FC = () => {
     );
 };
 
-export default PostList;
+export default PostList; 

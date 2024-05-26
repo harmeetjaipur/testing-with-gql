@@ -1,25 +1,26 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+// Create an HTTP link to the GraphQL API endpoint
 const httpLink = createHttpLink({
-    uri: 'https://api.bettermode.com',
+    uri: 'https://api.bettermode.com', // API URL
 });
 
+// Create a middleware link to set the authorization header with the token from localStorage
 const authLink = setContext((_, { headers }) => {
-    // Get the authentication token from local storage if it exists
-    const token = localStorage.getItem('token');
-    // Return the headers to the context so httpLink can read them
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
     return {
         headers: {
-            ...headers,
-            authorization: token ? `Bearer ${token}` : '',
+            ...headers, // Spread the existing headers
+            authorization: token ? `Bearer ${token}` : '', // Add the authorization header if token exists
         },
     };
 });
 
+// Create an Apollo Client instance with the authLink and httpLink
 const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
+    link: authLink.concat(httpLink), // Combine the authLink and httpLink
+    cache: new InMemoryCache(), // Initialize the cache
 });
 
-export default client;
+export default client; 

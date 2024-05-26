@@ -9,22 +9,23 @@ import { PostData } from './types';
 import Loading from '../components/Loading';
 import { fetchDate } from '../utils';
 
+// Post component to display a single post
 const Post: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const { loading, error, data, client } = useQuery<{ post: PostData }>(GET_POST, {
-        variables: { id },
+    const { id } = useParams<{ id: string }>(); // Get post id from URL params
+    const navigate = useNavigate(); // Hook to programmatically navigate
+    const { loading, error, data, } = useQuery<{ post: PostData }>(GET_POST, {
+        variables: { id }, // Query for the specific post by id
     });
 
-    const [likes, setLikes] = useState(data?.post.likes || 0);
+    const [likes, setLikes] = useState(data?.post.likes || 0); // State to track likes
 
-    if (loading) return <Loading />;
-    if (error) return <p>Error: {error.message}</p>;
+    if (loading) return <Loading />; // Show loading component while fetching data
+    if (error) return <p>Error: {error.message}</p>; // Show error message if query fails
 
-    const post = data?.post;
+    const post = data?.post; // Get the post data
 
     const handleLike = () => {
-        // using local state for likes as bearer token returns 403 for the mutation
+        // Increment likes (using local state as bearer token returns 403 for the mutation)
         setLikes(likes + 1);
     };
 
@@ -43,7 +44,7 @@ const Post: React.FC = () => {
                         onClick={() => navigate('/posts')}
                         className="flex items-center text-blue-500 hover:text-blue-700 mb-4"
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Back
+                        <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Back {/* Button to navigate back to posts list */}
                     </button>
                     <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">{post.title}</h2>
                     <div className="text-gray-700 dark:text-gray-300 mb-4">{post.description}</div>
@@ -54,7 +55,7 @@ const Post: React.FC = () => {
                         onClick={handleLike}
                         className="mt-auto w-20 px-4 mt-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition"
                     >
-                        <FontAwesomeIcon icon={faThumbsUp} /> <span data-testid={`likes-${post.title}`}>{likes}</span>
+                        <FontAwesomeIcon icon={faThumbsUp} /> <span data-testid={`likes-${post.title}`}>{likes}</span> {/* Button to like the post */}
                     </button>
                 </div>
             </div>
@@ -62,4 +63,4 @@ const Post: React.FC = () => {
     );
 };
 
-export default Post;
+export default Post; 
