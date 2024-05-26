@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, ApolloCache } from '@apollo/client';
+import { useQuery, } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
