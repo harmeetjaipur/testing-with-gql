@@ -4,21 +4,48 @@ import { useNavigate } from 'react-router-dom';
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkdVRVNUX2M4eWN1ZDBjQ1V3eVRkUyIsIm5ldHdvcmtJZCI6InlGTWhHaDZYcnMiLCJuZXR3b3JrRG9tYWluIjoicG9kZGVycy1vbGQuYmV0dGVybW9kZS5pbyIsInRva2VuVHlwZSI6IkdVRVNUIiwiZW50aXR5SWQiOm51bGwsInBlcm1pc3Npb25Db250ZXh0IjpudWxsLCJwZXJtaXNzaW9ucyI6bnVsbCwiaWF0IjoxNzE2NDE1NTcwLCJleHAiOjE3MTkwMDc1NzB9.CmO7oF8iTGIePj2KGqEGFZBl8NzQ6RAAFkExAuBYVEk`
-        localStorage.setItem("token", token);
-        navigate('/'); // Navigate to the home page after setting the token
-    }
+
+        if (username.trim() === '' || password.trim() === '') {
+            setError('Username and password are required.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+
+            if (!response.ok) {
+                throw new Error('Invalid username or password.');
+            }
+
+            const data = await response.json();
+            const { token } = data;
+
+            localStorage.setItem('token', token);
+            navigate('/');
+        } catch (error) {
+            setError('Invalid username or password.');
+        }
+    };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900" data-testid="login-form">
             <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-96">
                 <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Login</h2>
+                {error && <p className="mb-4 text-red-500">{error}</p>}
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-4" >
+                    <div className="mb-4">
                         <label className="block mb-1 text-gray-900 dark:text-gray-100">Username</label>
                         <input
                             type="text"
@@ -29,7 +56,7 @@ const Login: React.FC = () => {
                             required
                         />
                     </div>
-                    <div className="mb-4" >
+                    <div className="mb-4">
                         <label className="block mb-1 text-gray-900 dark:text-gray-100">Password</label>
                         <input
                             type="password"
