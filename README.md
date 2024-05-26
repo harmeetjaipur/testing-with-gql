@@ -45,35 +45,35 @@ A responsive web application built with Vite, React (using functional components
 3. Folder structure:
 
    ```
-      app/
-      ├── build/
-      │ └── ...
-      ├── dist/
-      │ └── ... (generated files)
-      ├── public/
-      │ └── ...
-      ├── src/
-      │ ├── components/
-      │ │ ├── Header.tsx
-      │ │ └── ProtectedRoute.tsx
-      │ ├── pages/
-      │ │ ├── Home.tsx
-      │ │ ├── Login.tsx
-      │ │ ├── Post.tsx
-      │ │ └── PostList.tsx
-      │ │ └── ...other pages go here
-      │ ├── apolloClient.ts
-      │ ├── App.tsx
-      │ └── index.css
-      ├── package.json
-      ├── babel.config.js
-      └── vite.config.js
-      └── ...other configs
+   app/
+   ├── build/
+   │ └── ...
+   ├── dist/
+   │ └── ... (generated files)
+   ├── public/
+   │ └── ...
+   ├── src/
+   │ ├── components/
+   │ │ ├── Header.tsx
+   │ │ └── ProtectedRoute.tsx
+   │ ├── pages/
+   │ │ ├── Home.tsx
+   │ │ ├── Login.tsx
+   │ │ ├── Post.tsx
+   │ │ └── PostList.tsx
+   │ │ └── ...other pages go here
+   │ ├── apolloClient.ts
+   │ ├── App.tsx
+   │ └── index.css
+   ├── package.json
+   ├── babel.config.js
+   └── vite.config.js
+   └── ...other configs
    ```
 
 4. Login credentials:
 
    ```
-      username: root
-      password: password
+   username: root
+   password: password
    ```
