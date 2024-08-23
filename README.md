@@ -28,8 +28,8 @@ A responsive web application built with Vite, React (using functional components
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:harmeetjaipur/bettermode.git
-   cd bettermode
+   git clone git@github.com:harmeetjaipur/testing-with-gql.git
+   cd testing-with-gql
    npm i
    npm run dev
    ```
