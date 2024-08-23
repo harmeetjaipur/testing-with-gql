@@ -1,4 +1,4 @@
-# Bettermode App
+# App
 
 A responsive web application built with Vite, React (using functional components and hooks), TypeScript, Tailwind CSS, and GraphQL. This project includes features such as a paginated list of posts, detailed post views, and a like button. Authentication is handled using a Bearer token.
 
